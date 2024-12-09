@@ -1,0 +1,198 @@
+/* General body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header styles for titles */
+h1, h2, h3, h4 {
+    color: maroon;
+    font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic;
+    text-decoration: underline;
+    font-size: 2rem;
+    text-align: center;
+}
+
+/* Special styling for h6 */
+h6 {
+    color: #333;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+/* Navbar styles */
+.navbar {
+    background-color: #444;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.navbar a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: #ff6f61;
+    text-decoration: underline;
+}
+
+/* Main content styles */
+.maincontent {
+    flex-grow: 1;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.article {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.article img {
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+.article h2 {
+    color: #007BFF;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+/* Styling for links */
+.back-link {
+    color: #1a73e8;
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar for layout (if needed) */
+#sidebar {
+    width: 250px;
+    background-color: #222;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin: 15px 0;
+    text-align: center;
+    transition: color 0.3s;
+}
+
+#sidebar a:hover {
+    color: #ffcc00;
+}
+
+/* Styling for the game canvas */
+#gameContainer {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+canvas {
+    background-color: #000;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.score {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 20px;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: #ff3333;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+/* Button styles */
+#startButton {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#startButton:hover {
+    background-color: #45a049;
+}
+
+#startButton:active {
+    transform: scale(0.98);
+}
+
+#startButton:focus {
+    outline: none;
+}
+
+/* Game Over screen styling */
+#gameOverScreen {
+    display: none;
+    text-align: center;
+    font-size: 22px;
+    color: #fff;
+    margin-top: 20px;
+}
+

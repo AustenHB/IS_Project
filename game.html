@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pong Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: black;
+      font-family: Arial, sans-serif;
+    }
+
+    #game-container {
+      text-align: center;
+      position: relative;
+      margin-top: 20px;
+    }
+
+    canvas {
+      border: 5px solid white;  /* Border around the canvas */
+    }
+
+    #score {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 30px;
+    }
+
+    #winner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 50px;
+      display: none;
+    }
+
+    #start-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 32px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #start-button:hover {
+      background-color: #45a049;
+    }
+
+    #nav-links {
+      margin-top: 20px;
+    }
+
+    #nav-links a {
+      color: white;
+      font-size: 18px;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    #nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-links">
+    <a href="../html/index.html">Home page</a>
+    <a href="../html/otherpage.html">Resume</a>
+  </div>
+  
+  <div id="game-container">
+    <canvas id="pong"></canvas>
+    <div id="score"></div>
+    <div id="winner"></div>
+    <button id="start-button" onclick="startGame()">Start Game</button>
+  </div>
+
+  <script>
+    // Setup canvas
+    const canvas = document.getElementById("pong");
+    const ctx = canvas.getContext("2d");
+
+    // Set canvas dimensions
+    canvas.width = 800;
+    canvas.height = 500;
+
+    // Create the pong paddle
+    const paddleWidth = 10, paddleHeight = 100;
+    const ballSize = 10;
+
+    // Ball object
+    let ball = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: ballSize,
+      speed: 6, // Increased speed
+      dx: 6,  // Ball direction (velocity)
+      dy: 6
+    };
+
+    // Paddle objects
+    let paddle1 = {
+      x: 0,
+      y: canvas.height / 2 - paddleHeight / 2,
+      width: paddleWidth,
+      height: paddleHeight,
+      dy: 0
+    };
+    
+    let paddle2 = {
+      x: canvas.width - paddleWidth,
+      y: canvas.height / 2 - paddleHeight / 2,
+      width: paddleWidth,
+      height: paddleHeight,
+      dy: 0
+    };
+
+    // Scores
+    let score1 = 0;
+    let score2 = 0;
+    const winningScore = 10; // Score needed to win
+    let gameStarted = false;
+
+    // Draw the ball
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Draw the paddles
+    function drawPaddle(paddle) {
+      ctx.beginPath();
+      ctx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
+      ctx.fillStyle = "white";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Draw the score
+    function drawScore() {
+      document.getElementById("score").textContent = `Player 1: ${score1} | Player 2: ${score2}`;
+    }
+
+    // Draw the winner message
+    function drawWinner(winner) {
+      const winnerMessage = document.getElementById("winner");
+      winnerMessage.textContent = `${winner} Wins!`;
+      winnerMessage.style.display = 'block';
+    }
+
+    // Reset the ball to the center
+    function resetBall() {
+      ball.x = canvas.width / 2;
+      ball.y = canvas.height / 2;
+      ball.dx *= -1; // Change direction
+    }
+
+    // Update the ball's position
+    function updateBall() {
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      // Ball collision with top and bottom walls
+      if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+        ball.dy *= -1;
+      }
+
+      // Ball collision with paddles
+      if (ball.x - ball.radius < paddle1.x + paddle1.width && 
+          ball.y > paddle1.y && ball.y < paddle1.y + paddle1.height || 
+          ball.x + ball.radius > paddle2.x && 
+          ball.y > paddle2.y && ball.y < paddle2.y + paddle2.height) {
+        ball.dx *= -1;
+        ball.speed += 0.2; // Increase ball speed gradually
+        ball.dx = ball.dx > 0 ? ball.speed : -ball.speed;
+        ball.dy = ball.dy > 0 ? ball.speed : -ball.speed;
+      }
+
+      // Ball goes out of bounds (left or right)
+      if (ball.x - ball.radius < 0) {
+        score2++;
+        if (score2 >= winningScore) {
+          drawWinner("Player 2");
+        } else {
+          resetBall();
+        }
+      }
+
+      if (ball.x + ball.radius > canvas.width) {
+        score1++;
+        if (score1 >= winningScore) {
+          drawWinner("Player 1");
+        } else {
+          resetBall();
+        }
+      }
+    }
+
+    // Update paddles' position
+    function updatePaddles() {
+      paddle1.y += paddle1.dy;
+      paddle2.y += paddle2.dy;
+
+      // Prevent paddles from moving out of bounds
+      if (paddle1.y < 0) paddle1.y = 0;
+      if (paddle1.y + paddle1.height > canvas.height) paddle1.y = canvas.height - paddle1.height;
+      if (paddle2.y < 0) paddle2.y = 0;
+      if (paddle2.y + paddle2.height > canvas.height) paddle2.y = canvas.height - paddle2.height;
+    }
+
+    // Control paddles
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "ArrowUp") paddle2.dy = -5;
+      if (e.key === "ArrowDown") paddle2.dy = 5;
+      if (e.key === "w") paddle1.dy = -5;
+      if (e.key === "s") paddle1.dy = 5;
+    });
+
+    document.addEventListener("keyup", function(e) {
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") paddle2.dy = 0;
+      if (e.key === "w" || e.key === "s") paddle1.dy = 0;
+    });
+
+    // Game loop
+    function gameLoop() {
+      if (score1 >= winningScore || score2 >= winningScore) return; // Stop game when someone wins
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+      drawBall();  // Draw ball
+      drawPaddle(paddle1); // Draw player 1 paddle
+      drawPaddle(paddle2); // Draw player 2 paddle
+      updateBall(); // Update ball position
+      updatePaddles(); // Update paddles position
+      drawScore(); // Update the score display
+      requestAnimationFrame(gameLoop); // Keep the game loop running
+    }
+
+    // Start the game
+    function startGame() {
+      gameStarted = true;
+      score1 = 0;
+      score2 = 0;
+      document.getElementById("winner").style.display = "none"; // Hide winner message
+      gameLoop(); // Start the game loop
+      document.getElementById("start-button").style.display = "none"; // Hide the start button after the game starts
+    }
+
+    // Show the start button if the game is not started
+    if (!gameStarted) {
+      document.getElementById("start-button").style.display = "block";
+    }
+  </script>
+</body>
+</html>
